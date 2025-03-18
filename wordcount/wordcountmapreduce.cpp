@@ -103,6 +103,8 @@ int main(int argc, char *argv[])
                 int rank_destino = 4 + (hash<string>{}(palavra) % 2);
                 MPI_Send(&parada, 1, MPI_INT, rank_destino, 3, MPI_COMM_WORLD);
 
+                //cout << "Enviando palavra " << palavra << " para processo " << rank_destino << endl;
+
                 int tamanho_palavra = palavra.size();
                 MPI_Send(&tamanho_palavra, 1, MPI_INT, rank_destino, 1, MPI_COMM_WORLD); 
 
@@ -120,15 +122,22 @@ int main(int argc, char *argv[])
         while(true){
             MPI_Recv(&parada, 1, MPI_INT, MPI_ANY_SOURCE, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             if(parada == 1){
+                cout << "Processo " << rank << " recebeu parada" << endl;
                 break;
             }
 
             int tamanho_palavra;
-            MPI_Recv(&tamanho_palavra, 1, MPI_INT, MPI_ANY_SOURCE, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+            MPI_Status status;
+            MPI_Recv(&tamanho_palavra, 1, MPI_INT, MPI_ANY_SOURCE, 1, MPI_COMM_WORLD, &status);
+
+            int source = status.MPI_SOURCE;
             
             vector<char> buffer(tamanho_palavra);
-            MPI_Recv(buffer.data(), tamanho_palavra, MPI_CHAR, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Recv(buffer.data(), tamanho_palavra, MPI_CHAR, source, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             string palavra(buffer.begin(), buffer.end());
+
+            cout << "Recebeu palavra " << palavra << " do processo " << source << endl;
 
             dicionario_local[palavra]++;
         }
@@ -153,6 +162,7 @@ int main(int argc, char *argv[])
             MPI_Recv(&tamanho_dicionario, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
             for (int j = 0; j < tamanho_dicionario; j++){
+            
                 int tamanho_palavra;
                 MPI_Recv(&tamanho_palavra, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
