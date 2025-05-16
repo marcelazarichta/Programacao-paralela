@@ -11,20 +11,22 @@ Este repositório contém quatro versões da aplicação **Word Count** implemen
 
 ## Compilação e execução
 
-- Sequential:
-  g++ -o wordcount_sequential sequential/wordcount.cpp
+- Sequential:  
+  g++ -o wordcount_sequential sequential/wordcount.cpp  
   ./wordcount_sequential input.txt
 
-- OMP:
-  g++ -fopenmp -o wordcount_omp openmp/wordcount.cpp
-  ./wordcount_omp input.txt
+- OMP:  
+  g++ -fopenmp -o wordcount_omp openmp/wordcount.cpp  
+  ./wordcount_omp input.txt  
 
-- MPI:
-  mpic++ -o wordcount_mpi mpi/wordcount.cpp
-  mpirun -np <n_processos> ./wordcount_mpi input.txt
+- MPI:  
+  mpic++ -o wordcount_mpi mpi/wordcount.cpp  
+  mpirun -np <n_processos> ./wordcount_mpi input.txt  
 
-- MapReduce:
-  mpic++ -o wordcount_mpimapreduce mpimapreduce/wordcount.cpp
-  mpirun -np 7 ./wordcount_mpimapreduce input.txt
+- MapReduce:  
+  mpic++ -o wordcount_mpimapreduce mpimapreduce/wordcount.cpp  
+  mpirun -np 7 ./wordcount_mpimapreduce input.txt  
 
 
+🎀 Projeto criado por Marcela Zarichta 🎀  
+GitHub: marcelazarichta
